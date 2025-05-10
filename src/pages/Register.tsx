@@ -1,5 +1,71 @@
-import React from 'react'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { InputField } from "../UI/InputField";
+
+const schema = yup.object({
+  email: yup.string().email("Некорректный email").required("Email обязателен"),
+  password: yup
+    .string()
+    .min(6, "Пароль слишком короткий")
+    .required("Пароль обязателен"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Пароли не совпадают")
+    .required("Подтвердите пароль"),
+});
+
+type RegisterForm = yup.InferType<typeof schema>;
 
 export const Register = () => {
-   return <h2 className="text-2xl font-semibold">📝 Register Page</h2>
-}
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterForm>({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data: RegisterForm) => {
+    console.log("Login data:", data);
+  };
+
+  return (
+    <div className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
+      <h2 className="text-xl font-bold mb-4">Registration</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <InputField
+          label="Email"
+          type="email"
+          autoComplete="email"
+          placeholder="Введите email"
+          {...register("email")}
+          error={errors.email?.message}
+        />
+
+        <InputField
+          label="Пароль"
+          type="password"
+          autoComplete="current-password"
+          placeholder="Введите password"
+          {...register("password")}
+          error={errors.password?.message}
+        />
+        <InputField
+          label="Подтвердите пароль"
+          type="password"
+          autoComplete="current-password"
+          placeholder="Введите password"
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded font-medium transition"
+        >
+          Войти
+        </button>
+      </form>
+    </div>
+  );
+};
