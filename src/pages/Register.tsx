@@ -1,7 +1,5 @@
 import React from 'react'
 
 export const Register = () => {
-  return (
-    <div>Register</div>
-  )
+   return <h2 className="text-2xl font-semibold">📝 Register Page</h2>
 }
