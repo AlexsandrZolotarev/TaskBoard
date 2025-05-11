@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { PrivateRoute } from "./PrivateRoute";
 import {MainLayout} from "../layouts/MainLayout";
@@ -8,7 +8,7 @@ import { Register } from "../pages/Register";
 import { Profile } from "../pages/Profile";
 import { ErrorPage } from "../pages/ErrorPage";
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <PrivateRoute />,
