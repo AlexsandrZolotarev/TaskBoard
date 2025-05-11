@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { InputField } from "../UI/InputField";
+import { Link } from "react-router-dom";
 
 const schema = yup.object({
   email: yup.string().email("Некорректный email").required("Email обязателен"),
@@ -66,6 +67,9 @@ export const Register = () => {
           Войти
         </button>
       </form>
+      <p className="text-sm text-center text-gray-600">
+  Есть аккаунт? <Link to="/login" className="text-blue-600 hover:underline">Войти</Link>
+</p>
     </div>
   );
 };
