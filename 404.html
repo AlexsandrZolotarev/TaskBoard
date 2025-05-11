@@ -1,5 +1,17 @@
-<script>
-  // Redirect all 404s to index.html (SPA fallback)
-  sessionStorage.redirect = location.href;
-  window.location.replace("/TaskBoard/");
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=/TaskBoard/" />
+    <script>
+      // GitHub Pages fallback for React Router
+      const redirectTo = sessionStorage.redirect || '/TaskBoard/';
+      sessionStorage.removeItem('redirect');
+      window.location.replace(redirectTo);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
