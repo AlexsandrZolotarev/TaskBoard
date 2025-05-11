@@ -1,6 +1,13 @@
-import { Outlet, Link } from "react-router-dom"
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export const MainLayout = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-blue-600 text-white p-4 flex justify-between">
@@ -9,15 +16,19 @@ export const MainLayout = () => {
           <Link to="/">Home</Link>
           <Link to="/profile">Profile</Link>
         </nav>
+        <button
+          onClick={handleLogout}
+          className="ml-4 text-sm text-white underline hover:text-gray-200"
+        >
+          Выйти
+        </button>
       </header>
 
       <main className="flex-1 bg-gray-100 p-6">
         <Outlet />
       </main>
 
-      <footer className="bg-blue-600 text-white p-4 text-center">
-        © 2025
-      </footer>
+      <footer className="bg-blue-600 text-white p-4 text-center">© 2025</footer>
     </div>
-  )
-}
+  );
+};
