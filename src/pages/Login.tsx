@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InputField } from "../UI/InputField";
+import { useAuth } from "../context/AuthContext";
 
 const schema = yup.object({
   email: yup.string().email("Некорректный email").required("Email обязателен"),
@@ -22,9 +23,11 @@ export const Login = () => {
   } = useForm<LoginForm>({
     resolver: yupResolver(schema),
   });
-
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const onSubmit = (data: LoginForm) => {
-    console.log("Login data:", data);
+    login(data.email);       
+    navigate("/")
   };
 
   return (

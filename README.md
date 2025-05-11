@@ -1,54 +1,48 @@
-# React + TypeScript + Vite
+# 📝 TaskBoard — React + TypeScript + Tailwind App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Простое приложение с аутентификацией, защищёнными маршрутами и адаптивным интерфейсом.  
+Разработано с нуля как pet-проект для резюме и практики.
 
-Currently, two official plugins are available:
+🔗 [**Live Demo**](https://alexsandrzolotarev.github.io/TaskBoard/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Стек технологий
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ⚛️ React + TypeScript
+- ⚡ Vite
+- 🎨 TailwindCSS + Heroicons
+- 🔐 React Context API (Auth)
+- 📦 React Router DOM
+- ✅ React Hook Form + Yup
+- 🌐 GitHub Pages Deploy
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧠 Возможности
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- ✅ Форма входа и регистрации с валидацией
+- 🔐 Защищённые маршруты через `PrivateRoute`
+- 💾 Авторизация сохраняется в `localStorage`
+- 🧭 Отдельные layout'ы для публичных и приватных страниц
+- 👤 Профиль пользователя с email из формы
+- 🚪 Logout и редирект
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 📂 Скриншоты
+
+> Добавь их позже в `/screenshots` и замени ссылки ниже:
+
+<img src="./screenshots/login.png" width="400"/>
+<img src="./screenshots/profile.png" width="400"/>
+
+---
+
+## ⚙️ Установка проекта
+
+```bash
+git clone https://github.com/AlexsandrZolotarev/TaskBoard.git
+cd TaskBoard
+npm install
+npm run dev
