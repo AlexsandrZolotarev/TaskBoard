@@ -3,7 +3,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { InputField } from "../UI/InputField";
-import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store";
+import { login } from "../store/slices/authSlice";
+
 
 const schema = yup.object({
   email: yup.string().email("Некорректный email").required("Email обязателен"),
@@ -17,18 +20,25 @@ type LoginForm = yup.InferType<typeof schema>;
 
 export const Login = () => {
   const {
-    register,
+    register: formRegister,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: yupResolver(schema),
   });
-  const { login } = useAuth();
+  const dispatch = useDispatch();
+  const users = useSelector((state:RootState) => state.users);
   const navigate = useNavigate();
-  const onSubmit = (data: LoginForm) => {
-    login(data.email);       
-    navigate("/")
-  };
+
+ const onSubmit = (data: LoginForm) => {
+  const user = users.find(u => u.email === data.email && u.password === data.password)
+  if (!user) {
+    alert("Неверный email или пароль")
+    return
+  }
+  dispatch(login(data.email))
+  navigate("/")
+}
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
@@ -39,7 +49,7 @@ export const Login = () => {
           type="email"
           autoComplete="email"
           placeholder="Введите email"
-          {...register("email")}
+          {...formRegister("email")}
           error={errors.email?.message}
         />
 
@@ -48,7 +58,7 @@ export const Login = () => {
           type="password"
           autoComplete="current-password"
           placeholder="Введите password"
-          {...register("password")}
+          {...formRegister("password")}
           error={errors.password?.message}
         />
         <button

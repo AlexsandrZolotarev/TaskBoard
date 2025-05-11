@@ -1,5 +1,5 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type TaskType = {
   id: number;
@@ -8,10 +8,15 @@ type TaskType = {
 };
 
 export const TaskBoard = () => {
-  const [tasks, setTasks] = useState<TaskType[]>([
-    { id: 1, title: "Изучить React", isDone: false },
-    { id: 2, title: "Сделать TaskBoard", isDone: true },
-  ]);
+  const [tasks, setTasks] = useState<TaskType[]>(() => {
+    const saved = localStorage.getItem("tasks");
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const [value, setValue] = useState<string>("");
 
   const toggleDone = (id: number) => {
@@ -21,6 +26,9 @@ export const TaskBoard = () => {
       )
     );
   };
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
   const AddTask = () => {
     const trimmed = value.trim();
     if (!trimmed) return;
@@ -30,6 +38,15 @@ export const TaskBoard = () => {
   const DeleteTask = (id: number) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as typeof filter;
+    setFilter(value);
+  };
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "active") return !task.isDone;
+    if (filter === "completed") return task.isDone;
+    return true;
+  });
   return (
     <div>
       <div>
@@ -45,8 +62,22 @@ export const TaskBoard = () => {
         </label>
         <button onClick={() => AddTask()}>Добавить Задачу</button>
       </div>
+      <div>
+        <label htmlFor="filter-select"></label>
+        <select
+          value={filter}
+          name="filter"
+          id="filter-select"
+          onChange={handleFilterChange}
+        >
+          <option value="">-- Фильтр --</option>
+          <option value="all">Все</option>
+          <option value="active">Активные</option>
+          <option value="completed">Завершённые</option>
+        </select>
+      </div>
       <ul className="space-y-2">
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <li
             key={task.id}
             className="bg-white p-4 rounded shadow flex items-center justify-between"

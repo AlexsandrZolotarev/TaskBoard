@@ -2,10 +2,11 @@ import { createRoot } from 'react-dom/client'
 import './styles/global.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router.tsx'
-import { AuthProvider } from './context/AuthContext.tsx'
+import { Provider } from 'react-redux'
+import { store } from './store/index.ts'
 
 createRoot(document.getElementById('root')!).render(
-  <AuthProvider>
+  <Provider store={store}>
     <RouterProvider router={router}/>
-  </AuthProvider>,
+  </Provider>,
 )

@@ -3,7 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { InputField } from "../UI/InputField";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../store/slices/usersSlice";
+import { login } from "../store/slices/authSlice";
+import type { RootState } from "../store";
+
 
 const schema = yup.object({
   email: yup.string().email("Некорректный email").required("Email обязателен"),
@@ -21,18 +25,27 @@ type RegisterForm = yup.InferType<typeof schema>;
 
 export const Register = () => {
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterForm>({
-    resolver: yupResolver(schema),
-  });
- const { login } = useAuth();
+  register: formRegister, 
+  handleSubmit,
+  formState: { errors },
+} = useForm<RegisterForm>({
+  resolver: yupResolver(schema),
+})
+  const dispatch = useDispatch();
+  const users = useSelector((state:RootState) => state.users);
   const navigate = useNavigate();
+
   const onSubmit = (data: RegisterForm) => {
-    login(data.email);       
+    const existing = users.find((u) => u.email === data.email);
+    if (existing) {
+      alert("Пользователь с таким email уже существует");
+      return;
+    }
+    dispatch(register({ email: data.email, password: data.password }));
+    dispatch(login(data.email)); 
     navigate("/");
   };
+
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Registration</h2>
@@ -42,7 +55,7 @@ export const Register = () => {
           type="email"
           autoComplete="email"
           placeholder="Введите email"
-          {...register("email")}
+          {...formRegister("email")}
           error={errors.email?.message}
         />
 
@@ -51,7 +64,7 @@ export const Register = () => {
           type="password"
           autoComplete="current-password"
           placeholder="Введите password"
-          {...register("password")}
+          {...formRegister("password")}
           error={errors.password?.message}
         />
         <InputField
@@ -59,7 +72,7 @@ export const Register = () => {
           type="password"
           autoComplete="current-password"
           placeholder="Введите password"
-          {...register("confirmPassword")}
+          {...formRegister("confirmPassword")}
           error={errors.confirmPassword?.message}
         />
         <button
@@ -70,8 +83,11 @@ export const Register = () => {
         </button>
       </form>
       <p className="text-sm text-center text-gray-600">
-  Есть аккаунт? <Link to="/login" className="text-blue-600 hover:underline">Войти</Link>
-</p>
+        Есть аккаунт?{" "}
+        <Link to="/login" className="text-blue-600 hover:underline">
+          Войти
+        </Link>
+      </p>
     </div>
   );
 };
