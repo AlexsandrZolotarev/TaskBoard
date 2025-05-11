@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 type TaskType = {
@@ -22,9 +23,12 @@ export const TaskBoard = () => {
   };
   const AddTask = () => {
     const trimmed = value.trim();
-    if(!trimmed) return;
+    if (!trimmed) return;
     setTasks([...tasks, { id: Date.now(), title: value, isDone: false }]);
     setValue("");
+  };
+  const DeleteTask = (id: number) => {
+    setTasks(tasks.filter((task) => task.id !== id));
   };
   return (
     <div>
@@ -58,6 +62,11 @@ export const TaskBoard = () => {
                 {task.title}
               </span>
             </label>
+
+            <TrashIcon
+              className="w-5 h-5 text-red-500 hover:text-red-700 cursor-pointer"
+              onClick={() => DeleteTask(task.id)}
+            />
           </li>
         ))}
       </ul>
