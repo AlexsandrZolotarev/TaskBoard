@@ -20,7 +20,8 @@ export const TaskBoard = () => {
   const [tasks, setTasks] = useState<TaskType[] | []>(user?.tasks || []);
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const [value, setValue] = useState<string>("");
-
+  const [draggedTaskId, setDraggedTaskId] = useState<number | null>(null);
+  const [dragOverId, setDragOverId] = useState<number | null>(null);
   const toggleDone = (id: number) => {
     setTasks(
       tasks.map((task) =>
@@ -41,7 +42,18 @@ export const TaskBoard = () => {
     const value = e.target.value as typeof filter;
     setFilter(value);
   };
+  const handleDrop = (targetId: number) => {
+    if (draggedTaskId === null || draggedTaskId === targetId) return;
 
+    const draggedIndex = tasks.findIndex((t) => t.id === draggedTaskId);
+    const targetIndex = tasks.findIndex((t) => t.id === targetId);
+    const newTasks = [...tasks];
+
+    const [draggedTask] = newTasks.splice(draggedIndex, 1);
+    newTasks.splice(targetIndex, 0, draggedTask);
+
+    setTasks(newTasks);
+  };
   const filteredTasks = tasks.filter((task) => {
     if (filter === "active") return !task.isDone;
     if (filter === "completed") return task.isDone;
@@ -86,8 +98,15 @@ export const TaskBoard = () => {
         <ul className="space-y-2">
           {filteredTasks.map((task) => (
             <li
+              draggable
+              onDragStart={() => setDraggedTaskId(task.id)}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnter={() => setDragOverId(task.id)}
+              onDragLeave={() => setDragOverId(null)}
+              onDrop={() => handleDrop(task.id)}
               key={task.id}
-              className="bg-white p-4 rounded shadow flex items-center justify-between"
+              className={`bg-white p-4 rounded shadow flex items-center justify-between 
+              ${dragOverId === task.id ? "bg-gray-100" : ""}`}
             >
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -102,7 +121,6 @@ export const TaskBoard = () => {
                   {task.title}
                 </span>
               </label>
-
               <TrashIcon
                 className="w-5 h-5 text-red-500 hover:text-red-700 cursor-pointer"
                 onClick={() => DeleteTask(task.id)}

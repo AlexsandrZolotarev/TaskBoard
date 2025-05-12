@@ -1,7 +1,11 @@
-import { useAuth } from "../context/AuthContext";
-import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux"
+import type { RootState } from "../store"
+import { Navigate, Outlet } from "react-router-dom"
 
 export const PrivateRoute = () => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to={"/login"} />;
-};
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.email !== null
+  )
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
+}

@@ -1,11 +1,13 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { logout } from "../store/slices/authSlice";
+import { useDispatch } from "react-redux";
+
 
 export const MainLayout = () => {
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate("/login");
   };
   return (
