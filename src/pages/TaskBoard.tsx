@@ -1,23 +1,21 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../store";
-import { saveTasks } from "../store/slices/usersSlice";
+import { saveTasks, type User } from "../store/slices/usersSlice";
+import { useDispatch } from "react-redux";
+import type { TaskType } from "./Profile";
 
-type TaskType = {
-  id: number;
-  title: string;
-  isDone: boolean;
-};
+type TaskProps = {
+   tasks: TaskType[],
+   setTasks:(tasks: TaskType[]) => void,
+   email: string | null,
+   user: User | undefined,
+   setPendingDeleteId : (TaskId : number | null) =>void
+}
 
-export const TaskBoard = () => {
+export const TaskBoard:React.FC<TaskProps>= ({tasks, setTasks ,email , user,setPendingDeleteId}) => {
+
   const dispatch = useDispatch();
-  const email = useSelector((state: RootState) => state.auth.email);
-  const user = useSelector((state: RootState) =>
-    state.users.find((user) => user.email === email)
-  );
-
-  const [tasks, setTasks] = useState<TaskType[] | []>(user?.tasks || []);
+  
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const [value, setValue] = useState<string>("");
   const [draggedTaskId, setDraggedTaskId] = useState<number | null>(null);
@@ -101,7 +99,10 @@ export const TaskBoard = () => {
               draggable
               onDragStart={() => setDraggedTaskId(task.id)}
               onDragOver={(e) => e.preventDefault()}
-              onDragEnter={() => setDragOverId(task.id)}
+              onDragEnter={() => {
+                setDragOverId(task.id);
+                setPendingDeleteId(task.id)
+              }}
               onDragLeave={() => setDragOverId(null)}
               onDrop={() => handleDrop(task.id)}
               key={task.id}

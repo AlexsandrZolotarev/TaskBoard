@@ -5,3 +5,47 @@
 .btn-primary {
   @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700;
 }
+.drop-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 40;
+  height: 100%;
+  transition: background 0.3s ease;
+}
+
+.drop-zone.left {
+  left: 0;
+}
+
+.drop-zone.right {
+  right: 0;
+}
+.drop-zone.hover::before {
+  content: "";
+  position: absolute;
+  top: 50px;
+  width: 300px;
+  height: 90%;
+  background-color: rgba(236,131,150, 0.2); 
+  border-radius: 50% / 90%;
+  filter: blur(10px);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.drop-zone:not(.hover)::before {
+  opacity: 0;
+}
+
+.drop-zone.right.hover::before {
+  left: auto;
+  right: 0px;
+  border-radius: 50% / 500%;
+}
+
+.drop-zone.left.hover::before {
+  right: auto;
+  border-radius: 50% / 500%;
+}
