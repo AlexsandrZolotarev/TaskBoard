@@ -11,6 +11,10 @@ import type { RootState } from "../store";
 
 const schema = yup.object({
   email: yup.string().email("Некорректный email").required("Email обязателен"),
+  username: yup
+    .string()
+    .min(5, "Имя слишком короткое")
+    .required("Имя обязателено"),
   password: yup
     .string()
     .min(6, "Пароль слишком короткий")
@@ -41,8 +45,8 @@ export const Register = () => {
       alert("Пользователь с таким email уже существует");
       return;
     }
-    dispatch(register({ email: data.email, password: data.password }));
-    dispatch(login(data.email)); 
+    dispatch(register({ email: data.email, password: data.password, username: data.username }));
+    dispatch(login({ email: data.email, username: data.username })); 
     navigate("/");
   };
 
@@ -50,6 +54,14 @@ export const Register = () => {
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Registration</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+         <InputField
+          label="Имя"
+          type="text "
+          autoComplete="on"
+          placeholder="Введите username"
+          {...formRegister("username")}
+          error={errors.email?.message}
+        />
         <InputField
           label="Email"
           type="email"

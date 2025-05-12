@@ -7,9 +7,9 @@
 }
 .drop-zone {
   position: absolute;
-  top: 0;
+  top: calc(4.5%);
   bottom: 0;
-  width: 100px;
+  width: 30%;
   z-index: 40;
   height: 100%;
   transition: background 0.3s ease;

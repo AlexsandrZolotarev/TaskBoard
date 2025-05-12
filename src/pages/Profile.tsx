@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { TaskBoard } from "./TaskBoard";
 import type { RootState } from "../store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConfirmDeleteModal } from "../UI/ConfirmDeleteModal";
 
 export type TaskType = {
@@ -12,6 +12,7 @@ export type TaskType = {
 
 export const Profile = () => {
   const email = useSelector((state: RootState) => state.auth.email);
+  const username = useSelector((state: RootState) => state.auth.email);
   const user = useSelector((state: RootState) =>
     state.users.find((user) => user.email === email)
   );
@@ -33,7 +34,7 @@ export const Profile = () => {
       <div>
         <h2 className="text-xl font-bold mb-4">Профиль</h2>
         <p className="text-gray-800">
-          Вы вошли как: <strong>{email}</strong>
+          Вы вошли как: <strong>{username}</strong>
         </p>
         <TaskBoard
           tasks={tasks}

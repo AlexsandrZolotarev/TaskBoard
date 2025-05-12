@@ -4,6 +4,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 export type User = {
   email: string
   password: string
+  username: string
   tasks: {
     id: number
     title: string
@@ -19,7 +20,7 @@ const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    register: (state, action: PayloadAction<{ email: string; password: string }>) => {
+    register: (state, action: PayloadAction<{ email: string; password: string ; username: string}>) => {
       const existing = state.find(u => u.email === action.payload.email)
       if (!existing) {
         state.push({ ...action.payload, tasks: [] })
