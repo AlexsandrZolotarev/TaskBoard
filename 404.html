@@ -5,7 +5,6 @@
     <title>Redirecting...</title>
     <meta http-equiv="refresh" content="0; url=/TaskBoard/" />
     <script>
-      // GitHub Pages fallback for React Router
       const redirectTo = sessionStorage.redirect || '/TaskBoard/';
       sessionStorage.removeItem('redirect');
       window.location.replace(redirectTo);
